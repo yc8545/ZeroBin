@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - ZeroBin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Arial", sans-serif;
+        }
+        body {
+            background: #f4f4f4;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .profile-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid #00c853;
+            margin-bottom: 10px;
+        }
+        h2 {
+            color: #00c853;
+            margin-bottom: 5px;
+        }
+        .info {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 15px;
+        }
+        .credit-box {
+            font-size: 20px;
+            font-weight: bold;
+            color: #00c853;
+            margin-bottom: 15px;
+        }
+        .btn {
+            padding: 8px 12px;
+            background: #00c853;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background: #009624;
+        }
+        .history {
+            text-align: left;
+            margin-top: 15px;
+        }
+        .history h3 {
+            color: #00c853;
+            margin-bottom: 10px;
+        }
+        .history-item {
+            background: #f9f9f9;
+            padding: 8px;
+            border-radius: 5px;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img src="WhatsApp Image 2024-11-08 at 13.46.34_22390d82.jpg" alt="User Profile" class="profile-pic">
+        <h2 id="userName">HiccupVerma</h2>
+        <p class="info" id="userEmail">Hiccupverma@example.com</p>
+        <p class="credit-box">Credits: <strong id="userCredits">150</strong></p>
+        <p>Rank: <strong id="userRank">#5</strong></p>
+
+        <button class="btn">✏️ Edit Profile</button>
+
+        <div class="history">
+            <h3>Recycling History ♻️</h3>
+            <div class="history-item">✔ Earned 50

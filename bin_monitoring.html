@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bin Optimization - ZeroBin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Arial", sans-serif;
+        }
+        body {
+            background: #f4f4f4;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        h2 {
+            color: #00c853;
+            margin-bottom: 15px;
+        }
+        .bin-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            margin: 10px auto;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+        }
+        .bin-box:hover {
+            background: #e0f7fa;
+        }
+        .details {
+            display: none;
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 5px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>🗑️ Bin Optimization & Repair</h2>
+        <p>Monitor bins that need urgent attention.</p>
+
+        <!-- List of Bins That Need Attention -->
+        <div class="bin-box" onclick="toggleDetails('bin1')">
+            🔴 Bin #101 - Overflowing
+            <div id="bin1" class="details">
+                <p>Location: Block A</p>
+                <p>Status: Needs immediate clearance.</p>
+            </div>
+        </div>
+
+        <div class="bin-box" onclick="toggleDetails('bin2')">
+            ⚠️ Bin #205 - Damaged Lid
+            <div id="bin2" class="details">
+                <p>Location: Library Area</p>
+                <p>Status: Requires lid replacement.</p>
+            </div>
+        </div>
+
+        <div class="bin-box" onclick="toggleDetails('bin3')">
+            ❌ Bin #309 - Missing
+            <div id="bin3" class="details">
+                <p>Location: Cafeteria</p>
+                <p>Status: Reported missing, needs replacement.</p>
+            </div>
+        </div>
+
+        <div class="bin-box" onclick="toggleDetails('bin4')">
+            🔴 Bin #412 - Overflowing
+            <div id="bin4" class="details">
+                <p>Location: Science Block</p>
+                <p>Status: Needs urgent collection.</p>
+            </div>
+        </div>
+
+        <div class="bin-box" onclick="toggleDetails('bin5')">
+            ⚠️ Bin #528 - Faulty Sensor
+            <div id="bin5" class="details">
+                <p>Location: Parking Lot</p>
+                <p>Status: Sensor malfunction, needs recalibration.</p>
+            </div>
+        </div>
+
+        <div class="bin-box" onclick="toggleDetails('bin6')">
+            ❌ Bin #634 - Missing
+            <div id="bin6" class="details">
+                <p>Location: Sports Complex</p>
+                <p>Status: Needs immediate replacement.</p>
+            </div>
+        </div>
+
+        <div class="bin-box" onclick="toggleDetails('bin7')">
+            ⚠️ Bin #702 - Fire Damage
+            <div id="bin7" class="details">
+                <p>Location: Hostel Block</p>
+                <p>Status: Requires new installation.</p>
+            </div>
+        </div>
+
+        <div class="bin-box" onclick="toggleDetails('bin8')">
+            🔴 Bin #811 - Overflowing
+            <div id="bin8" class="details">
+                <p>Location: Main Gate</p>
+                <p>Status: Needs collection within 2 hours.</p>
+            </div>
+        </div>
+
+        <div class="bin-box" onclick="toggleDetails('bin9')">
+            ⚠️ Bin #923 - Jammed Lid
+            <div id="bin9" class="details">
+                <p>Location: Auditorium</p>
+                <p>Status: Lid stuck, requires maintenance.</p>
+            </div>
+        </div>
+
+        <div class="bin-box" onclick="toggleDetails('bin10')">
+            ❌ Bin #1024 - Missing
+            <div id="bin10" class="details">
+                <p>Location: Faculty Block</p>
+                <p>Status: Needs replacement.</p>
+            </div>
+        </div>
+
+        <div class="bin-box" onclick="toggleDetails('bin11')">
+            ⚠️ Bin #1132 - Structural Crack
+            <div id="bin11" class="details">
+                <p>Location: Research Lab</p>
+                <p>Status: Needs repair or replacement.</p>
+            </div>
+        </div>
+
+        <div class="bin-box" onclick="toggleDetails('bin12')">
+            🔴 Bin #1245 - Overflowing
+            <div id="bin12" class="details">
+                <p>Location: IT Department</p>
+                <p>Status: Needs collection by evening.</p>
+            </div>
+        </div>
+
+        <div class="bin-box" onclick="toggleDetails('bin13')">
+            ⚠️ Bin #1350 - Faulty Lock
+            <div id="bin13" class="details">
+                <p>Location: Administration Office</p>
+                <p>Status: Lock stuck, requires maintenance.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleDetails(binId) {
+            let bin = document.getElementById(binId);
+            bin.style.display = (bin.style.display === "block") ? "none" : "block";
+        }
+    </script>
+
+</body>
+</html>

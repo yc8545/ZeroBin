@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User & Staff Management - ZeroBin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Arial", sans-serif;
+        }
+        body {
+            background: #f4f4f4;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        h2 {
+            color: #00c853;
+            margin-bottom: 15px;
+        }
+        .stat-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            margin: 10px auto;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+        }
+        .stat-box:hover {
+            background: #e0f7fa;
+        }
+        .details {
+            display: none;
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 5px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>👥 User & Staff Management</h2>
+        <p>Monitor users, staff presence, and daily work progress.</p>
+
+        <!-- Active Users -->
+        <div class="stat-box" onclick="toggleDetails('activeUsers')">
+            🔹 Active Users: <strong id="activeUserCount">5</strong>
+            <div id="activeUsers" class="details">
+                <p>Alice, Bob, Charlie, David, Eve</p>
+            </div>
+        </div>
+
+        <!-- Present Staff -->
+        <div class="stat-box" onclick="toggleDetails('presentStaff')">
+            🟢 Staff Present Today: <strong id="presentStaffCount">3</strong>
+            <div id="presentStaff" class="details">
+                <p>Frank, Grace, Hannah</p>
+            </div>
+        </div>
+
+        <!-- Work Summary -->
+        <div class="stat-box" onclick="toggleDetails('workSummary')">
+            ✅ Tasks Completed Today: <strong id="taskCount">4</strong>
+            <div id="workSummary" class="details">
+                <p>Frank: Collected 10 bins</p>
+                <p>Grace: Repaired 3 faulty bins</p>
+                <p>Hannah: Updated bin monitoring data</p>
+                <p>Bob: Verified 5 reports</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleDetails(sectionId) {
+            let section = document.getElementById(sectionId);
+            section.style.display = (section.style.display === "block") ? "none" : "block";
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redeem Benefits - ZeroBin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Arial", sans-serif;
+        }
+        body {
+            margin-top: 100px;
+            margin-bottom: 100px;
+            background: #f4f4f4;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+        }
+        h2 {
+            color: #00c853;
+            margin-bottom: 10px;
+        }
+        .credit-box {
+            font-size: 22px;
+            font-weight: bold;
+            color: #00c853;
+            margin-bottom: 15px;
+        }
+        .reward-list {
+            text-align: left;
+            margin-bottom: 10px;
+        }
+        .reward-item {
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn {
+            padding: 8px 12px;
+            background: #00c853;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background: #009624;
+        }
+        .success-message {
+            color: green;
+            display: none;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body >
+
+    <div class="container">
+        <h2>🎓 Redeem Your University Benefits</h2>
+        <p class="credit-box">You have: <strong id="creditBalance">200</strong> Credits</p>
+
+        <div class="reward-list">
+            <div class="reward-item">
+                <span>📚 Library Fine Waiver (Up to ₹100)</span>
+                <button class="btn" onclick="redeem(50)">Redeem (50)</button>
+            </div>
+            <div class="reward-item">
+                <span>💻 2 Extra Lab Hours</span>
+                <button class="btn" onclick="redeem(75)">Redeem (75)</button>
+            </div>
+            <div class="reward-item">
+                <span>🍔 10% Discount in Cafeteria</span>
+                <button class="btn" onclick="redeem(30)">Redeem (30)</button>
+            </div>
+            <div class="reward-item">
+                <span>🎟️ Free Entry to College Event</span>
+                <button class="btn" onclick="redeem(100)">Redeem (100)</button>
+            </div>
+            <div class="reward-item">
+                <span>👕 University Merchandise (T-Shirt, Bottle)</span>
+                <button class="btn" onclick="redeem(120)">Redeem (120)</button>
+            </div>
+            <div class="reward-item">
+                <span>🎓 5% Discount on Exam Fee</span>
+                <button class="btn" onclick="redeem(150)">Redeem (150)</button>
+            </div>
+            <div class="reward-item">
+                <span>🏋️ 1 Month Free Gym Access</span>
+                <button class="btn" onclick="redeem(200)">Redeem (200)</button>
+            </div>
+            <div class="reward-item">
+                <span>🚗 Priority Parking Spot for 1 Week</span>
+                <button class="btn" onclick="redeem(100)">Redeem (100)</button>
+            </div>
+        </div>
+
+        <p id="redeemMessage" class="success-message">✅ Redemption Successful!</p>
+    </div>
+
+    <script>
+        let userCredits = 200;
+
+        function redeem(cost) {
+            if (userCredits >= cost) {
+                userCredits -= cost;
+                document.getElementById("creditBalance").innerText = userCredits;
+                document.getElementById("redeemMessage").style.display = "block";
+
+                setTimeout(() => {
+                    document.getElementById("redeemMessage").style.display = "none";
+                }, 3000);
+            } else {
+                alert("❌ Not enough credits to redeem this benefit!");
+            }
+        }
+    </script>
+
+</body>
+</html>

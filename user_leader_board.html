@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard - ZeroBin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Arial", sans-serif;
+        }
+        body {
+            background: #f4f4f4;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+        }
+        h2 {
+            color: #00c853;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #00c853;
+            color: white;
+            text-align: center;
+        }
+        tr:nth-child(odd) {
+            background: #f9f9f9;
+        }
+        .gold { background: #ffd700; font-weight: bold; }
+        .silver { background: #c0c0c0; font-weight: bold; }
+        .bronze { background: #cd7f32; font-weight: bold; }
+        .highlight {
+            background: #e3ffe3;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>🏆 ZeroBin Leaderboard</h2>
+        <p>Top recyclers leading the way! ♻️</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>User</th>
+                    <th>Credits</th>
+                </tr>
+            </thead>
+            <tbody id="leaderboardBody">
+                <!-- Data will be inserted dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        let users = [
+            { name: "Alice Kumari", credits: 1200 },
+            { name: "Bob parjapati", credits: 1100 },
+            { name: "Pakdandi Charlie", credits: 1050 },
+            { name: "David Chaudhary", credits: 900 },
+            { name: "Eve Sharma", credits: 850 },
+            { name: "Frank Bhaskar", credits: 800 },
+            { name: "Simran Grace", credits: 750 },
+            { name: "Sandeep Hannah", credits: 700 },
+            { name: "Lokesh Ian", credits: 650 },
+            { name: "Jack Barbosa", credits: 600 }
+        ];
+
+        function loadLeaderboard() {
+            let leaderboardBody = document.getElementById("leaderboardBody");
+            leaderboardBody.innerHTML = "";
+
+            users.forEach((user, index) => {
+                let row = document.createElement("tr");
+                
+                if (index === 0) row.classList.add("gold");
+                else if (index === 1) row.classList.add("silver");
+                else if (index === 2) row.classList.add("bronze");
+                else row.classList.add("highlight");
+
+                row.innerHTML = `
+                    <td>#${index + 1}</td>
+                    <td>${user.name}</td>
+                    <td>${user.credits}</td>
+                `;
+
+                leaderboardBody.appendChild(row);
+            });
+        }
+
+        loadLeaderboard();
+    </script>
+
+</body>
+</html>

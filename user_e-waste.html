@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule E-Waste Pickup - ZeroBin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Arial", sans-serif;
+        }
+        body {
+            background: #f4f4f4;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+        }
+        h2 {
+            color: #00c853;
+            margin-bottom: 10px;
+        }
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            background: #f9f9f9;
+        }
+        textarea {
+            resize: none;
+        }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #00c853;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background: #009624;
+        }
+        .success-message {
+            color: green;
+            display: none;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>♻️ Schedule Your E-Waste Pickup</h2>
+        <p>Dispose of your old electronics responsibly and earn credits!</p>
+
+        <form id="pickupForm">
+            <label for="ewasteType">🖥️ Select E-Waste Type:</label>
+            <select id="ewasteType" class="input-field" required>
+                <option value="">-- Choose Type --</option>
+                <option value="laptop">Laptop</option>
+                <option value="mobile">Mobile Phone</option>
+                <option value="tv">Television</option>
+                <option value="battery">Battery</option>
+                <option value="other">Other</option>
+            </select>
+
+            <label for="pickupDate">📅 Select Pickup Date:</label>
+            <input type="date" id="pickupDate" class="input-field" required>
+
+            <label for="pickupTime">⏳ Select Pickup Time:</label>
+            <input type="time" id="pickupTime" class="input-field" required>
+
+            <label for="pickupLocation">📍 Enter Pickup Location:</label>
+            <input type="text" id="pickupLocation" class="input-field" placeholder="Enter your address" required>
+
+            <button type="submit" class="btn">🚀 Schedule Pickup</button>
+        </form>
+        
+        <p id="pickupMessage" class="success-message">✅ Pickup Scheduled Successfully!</p>
+    </div>
+
+    <script>
+        document.getElementById("pickupForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            document.getElementById("pickupMessage").style.display = "block";
+            setTimeout(() => {
+                document.getElementById("pickupMessage").style.display = "none";
+            }, 3000);
+            this.reset();
+        });
+    </script>
+
+</body>
+</html>

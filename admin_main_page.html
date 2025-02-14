@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - ZeroBin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Arial", sans-serif;
+        }
+        body {
+            background: #f4f4f4;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .navbar {
+            width: 100%;
+            background: #00c853;
+            padding: 15px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 18px;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        h2 {
+            color: #00c853;
+            margin-bottom: 15px;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .grid-item {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .grid-item:hover {
+            background: #e0f7fa;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <span>ZeroBin - Admin Dashboard</span>
+        <div>
+            <a href="#">Home</a>
+            <a href="admin_dashboard.html">Dashboard & Overview</a>
+            <a href="user_staff_management.html">User & Staff Management</a>
+            <a href="bin_monitoring.html">Bin Monitoring & Optimization</a>
+            <a href="admin_profile.html">My Profile</a>
+        </div>
+    </div>
+
+    <!-- Admin Welcome Section -->
+    <div class="container">
+        <h2>👨‍💼 Hello, Admin!</h2>
+        <p>Manage users, monitor bins, and optimize waste collection efficiently.</p>
+
+        <!-- Grid Layout for Management Sections -->
+        <div class="grid-container">
+            <div class="grid-item" onclick="navigateTo('admin_dashboard.html')">📊 Dashboard & Overview</div>
+            <div class="grid-item" onclick="navigateTo('user_staff_management.html')">👥 User & Staff Management</div>
+            <div class="grid-item" onclick="navigateTo('bin_monitoring.html')">🗑️ Bin Monitoring & Optimization</div>
+            <div class="grid-item" onclick="navigateTo('admin_profile.html')">👤 My Profile</div>
+        </div>
+    </div>
+
+    <script>
+        function navigateTo(page) {
+            window.location.href = page;
+        }
+    </script>
+
+</body>
+</html>
