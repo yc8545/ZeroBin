@@ -75,62 +75,57 @@
         }
     </style>
 </head>
-<body>
 
-    <div class="container">
-        <h1>Welcome to ZeroBin</h1>
-        <p class="quote">"The future is green when waste is seen!" 🌍</p>
 
-        <select id="loginSelect" class="dropdown">
-            <option value="">Select Login Type</option>
-            <option value="user">User Login</option>
-            <option value="staff">Staff Login</option>
-            <option value="admin">Admin Login</option>
-        </select>
-
-        <div id="loginForm" class="login-form">
-            <input type="text" id="userId" class="input-field" placeholder="User ID" required>
-            <input type="password" id="password" class="input-field" placeholder="Password" required>
-            <button class="login-btn" onclick="login()">Login</button>
+    <body>
+        <div class="container">
+            <h1>Welcome to ZeroBin</h1>
+            <p class="quote">"The future is green when waste is seen!" 🌍</p>
+    
+            <select id="loginSelect" class="dropdown">
+                <option value="">Select Login Type</option>
+                <option value="user">User Login</option>
+                <option value="staff">Staff Login</option>
+                <option value="admin">Admin Login</option>
+            </select>
+    
+            <div id="loginForm" class="login-form">
+                <input type="text" id="userId" class="input-field" placeholder="User ID" required>
+                <input type="password" id="password" class="input-field" placeholder="Password" required>
+                <button class="login-btn" id="loginBtn">Login</button>
+            </div>
         </div>
-    </div>
-
-    <script>
-        document.getElementById("loginSelect").addEventListener("change", function() {
-            let loginForm = document.getElementById("loginForm");
-            if (this.value) {
-                loginForm.style.display = "block";
-            } else {
-                loginForm.style.display = "none";
-            }
-        });
-
-        function login() {
-            let userType = document.getElementById("loginSelect").value;
-            let userId = document.getElementById("userId").value;
-            let password = document.getElementById("password").value;
-
-            if (userId && password) {
-                let redirectPage = "";
-
-                if (userType === "user") {
-                    redirectPage = "user_main_page.html";
-                } else if (userType === "staff") {
-                    redirectPage = "staff_main_page.html";
-                } else if (userType === "admin") {
-                    redirectPage = "admin_main_page.html";
+    
+        <!-- Move script here -->
+        <script>
+            document.getElementById("loginSelect").addEventListener("change", function() {
+                let loginForm = document.getElementById("loginForm");
+                loginForm.style.display = this.value ? "block" : "none";
+            });
+    
+            document.getElementById("loginBtn").addEventListener("click", function() {
+                let userType = document.getElementById("loginSelect").value;
+                let userId = document.getElementById("userId").value;
+                let password = document.getElementById("password").value;
+    
+                if (userId && password) {
+                    let redirectPage = {
+                        user: "user_main_page.html",
+                        staff: "staff_main_page.html",
+                        admin: "admin_main_page.html"
+                    }[userType];
+    
+                    if (redirectPage) {
+                        alert(`Logging in as ${userType}...`);
+                        window.location.href = redirectPage;
+                    } else {
+                        alert("Please select a valid login type.");
+                    }
                 } else {
-                    alert("Please select a valid login type.");
-                    return;
+                    alert("Please enter both User ID and Password.");
                 }
-
-                alert(`Logging in as ${userType}...`);
-                window.location.href = redirectPage; // Redirect to the selected page
-            } else {
-                alert("Please enter both User ID and Password.");
-            }
-        }
-    </script>
-
-</body>
+            });
+        </script>
+    </body>
+    
 </html>
