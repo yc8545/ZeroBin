@@ -124,7 +124,8 @@
                     return;
                 }
 
-                
+                alert(`Logging in as ${userType}...`);
+                window.location.href = redirectPage; // Redirect to the selected page
             } else {
                 alert("Please enter both User ID and Password.");
             }
