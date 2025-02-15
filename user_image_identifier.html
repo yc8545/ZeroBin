@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZeroBin - Smart Waste Classification</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gradient-to-r from-green-400 to-blue-500 p-6">
+    <div class="bg-white shadow-xl rounded-lg p-8 max-w-md w-full text-center">
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">ZeroBin</h1>
+        <p class="text-gray-600 italic mb-4">"Smart waste management for a cleaner future!" 🌍</p>
+        
+        <p id="modelStatus" class="text-yellow-500 font-semibold">Loading model...</p>
+
+        <button id="openCamera" class="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 mt-4">Open Camera</button>
+        <input type="file" id="uploadImage" accept="image/*" class="mt-4 w-full p-2 border border-gray-300 rounded-md" />
+        
+        <div class="mt-4">
+            <video id="video" class="border rounded-md w-full" autoplay></video>
+        </div>
+        
+        <button id="capture" class="mt-4 w-full bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">Capture & Analyze</button>
+        <canvas id="canvas" class="hidden" width="224" height="224"></canvas>
+        
+        <p id="result" class="mt-4 text-lg font-semibold text-gray-800">Prediction: </p>
+        <p id="binSuggestion" class="mt-2 text-lg font-semibold text-gray-800">Suggested Bin: </p>
+    </div>
+
+    <script>
+        const video = document.getElementById("video");
+        const canvas = document.getElementById("canvas");
+        const resultText = document.getElementById("result");
+        const binSuggestion = document.getElementById("binSuggestion");
+        const ctx = canvas.getContext("2d");
+        let model;
+
+        async function loadModel() {
+            try {
+                console.log("Loading MobileNetV2 model...");
+                model = await mobilenet.load(); // ✅ MobileNetV2 loads instantly
+                document.getElementById("modelStatus").innerText = "Model loaded successfully! ✅";
+                console.log("Model loaded successfully!");
+            } catch (error) {
+                document.getElementById("modelStatus").innerText = "Error loading model ❌";
+                console.error("Error loading model:", error);
+                alert("Failed to load model. Check the console for details.");
+            }
+        }
+
+        loadModel();
+
+        document.getElementById("openCamera").addEventListener("click", async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = stream;
+            } catch (err) {
+                console.error("Camera access error:", err);
+                alert("Please allow camera access.");
+            }
+        });
+
+        document.getElementById("capture").addEventListener("click", () => {
+            ctx.drawImage(video, 0, 0, 224, 224);
+            processImage();
+        });
+
+        document.getElementById("uploadImage").addEventListener("change", (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    ctx.drawImage(img, 0, 0, 224, 224);
+                    processImage();
+                };
+                img.src = e.target.result;
+            };
+            reader.onerror = () => alert("Error reading the image file.");
+            reader.readAsDataURL(file);
+        });
+
+        async function processImage() {
+            if (!model) {
+                alert("Model is not loaded yet. Please wait...");
+                return;
+            }
+
+            const tensor = tf.browser.fromPixels(canvas)
+                .resizeNearestNeighbor([224, 224])
+                .toFloat()
+                .expandDims();
+
+            const predictions = await model.classify(tensor);
+            const identifiedWaste = predictions[0].className.toLowerCase();
+
+            resultText.innerText = `Prediction: ${identifiedWaste}`;
+            
+            let binType = "Not sure, please check manually.";
+            if (identifiedWaste.includes("banana") || identifiedWaste.includes("apple") || identifiedWaste.includes("food") || identifiedWaste.includes("vegetable")) {
+                binType = "🟢 Green Bin (Organic Waste)";
+            } else if (identifiedWaste.includes("bottle") || identifiedWaste.includes("plastic") || identifiedWaste.includes("paper") || identifiedWaste.includes("glass")) {
+                binType = "🔵 Blue Bin (Recyclables)";
+            } else if (identifiedWaste.includes("electronics") || identifiedWaste.includes("battery") || identifiedWaste.includes("hazardous")) {
+                binType = "⚫ Black Bin (Hazardous / Non-Recyclables)";
+            }
+
+            binSuggestion.innerText = `Suggested Bin: ${binType}`;
+            tensor.dispose();
+        }
+    </script>
+</body>
+</html>
