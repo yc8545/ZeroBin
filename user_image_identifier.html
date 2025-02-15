@@ -4,12 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZeroBin - Smart Waste Classification</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="flex items-center justify-center min-h-screen bg-gradient-to-r from-green-400 to-blue-500 p-6">
     <div class="bg-white shadow-xl rounded-lg p-8 max-w-md w-full text-center">
         <h1 class="text-3xl font-bold text-gray-800 mb-4">ZeroBin</h1>
         <p class="text-gray-600 italic mb-4">"Smart waste management for a cleaner future!" 🌍</p>
+
+        <p id="modelStatus" class="text-yellow-500 font-semibold">Loading model...</p>
 
         <button id="openCamera" class="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 mt-4">Open Camera</button>
         <button id="switchCamera" class="hidden w-full bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 mt-2">Switch Camera</button>
@@ -28,10 +32,27 @@
     <script>
         let videoStream = null;
         let isFrontCamera = true;
+        let model;
         const video = document.getElementById("video");
         const videoContainer = document.getElementById("videoContainer");
         const binSuggestion = document.getElementById("binSuggestion");
         const ctx = document.getElementById("canvas").getContext("2d");
+
+        // Load MobileNet model
+        async function loadModel() {
+            try {
+                console.log("Loading MobileNet...");
+                model = await mobilenet.load();
+                document.getElementById("modelStatus").innerText = "Model loaded successfully! ✅";
+                console.log("Model loaded successfully!");
+            } catch (error) {
+                document.getElementById("modelStatus").innerText = "❌ Error loading model!";
+                console.error("Error loading MobileNet:", error);
+                alert("Failed to load MobileNet. Please check your internet connection.");
+            }
+        }
+
+        loadModel(); // Load model when page loads
 
         // Open Camera
         async function openCamera() {
@@ -62,13 +83,50 @@
             openCamera();
         });
 
-        // Capture Image from Camera
+        // Capture Image from Camera & Identify Waste
         document.getElementById("capture").addEventListener("click", () => {
             ctx.drawImage(video, 0, 0, 224, 224);
-            fakeIdentifyWaste();
+            autoIdentifyWaste();
         });
 
-        // Handle Image Upload
+        // Auto-identify waste from captured image
+        async function autoIdentifyWaste() {
+            if (!model) {
+                alert("Model is not loaded yet. Please wait...");
+                return;
+            }
+
+            const tensor = tf.browser.fromPixels(document.getElementById("canvas"))
+                .resizeNearestNeighbor([224, 224])
+                .toFloat()
+                .expandDims();
+
+            try {
+                const predictions = await model.classify(tensor);
+                console.log("Predictions:", predictions);
+
+                // Determine Suggested Bin
+                const identifiedWaste = predictions[0]?.className?.toLowerCase() || "";
+                let binType = "🔵 Blue Bin (Recyclables)"; // Default if unrecognized
+
+                if (identifiedWaste.includes("bottle") || identifiedWaste.includes("plastic") || identifiedWaste.includes("can") || identifiedWaste.includes("paper") || identifiedWaste.includes("metal") || identifiedWaste.includes("cardboard")) {
+                    binType = "🔵 Blue Bin (Recyclables)";
+                } else if (identifiedWaste.includes("battery") || identifiedWaste.includes("electronics") || identifiedWaste.includes("hazardous") || identifiedWaste.includes("chemical") || identifiedWaste.includes("paint") || identifiedWaste.includes("glass")) {
+                    binType = "🔴 Red Bin (Hazardous / Non-Recyclables)";
+                } else if (identifiedWaste.includes("food") || identifiedWaste.includes("apple") || identifiedWaste.includes("banana") || identifiedWaste.includes("vegetable") || identifiedWaste.includes("organic")) {
+                    binType = "🟢 Green Bin (Organic Waste)";
+                }
+
+                binSuggestion.innerText = `Suggested Bin: ${binType}`;
+            } catch (error) {
+                console.error("Error during classification:", error);
+                binSuggestion.innerText = "Suggested Bin: 🔵 Blue Bin (Recyclables)";
+            }
+
+            tensor.dispose();
+        }
+
+        // Handle Image Upload (Fake AI)
         document.getElementById("uploadImage").addEventListener("change", (event) => {
             const file = event.target.files[0];
             if (!file) return;
@@ -78,7 +136,7 @@
                 const img = new Image();
                 img.onload = () => {
                     ctx.drawImage(img, 0, 0, 224, 224);
-                    fakeIdentifyWaste(file.name); // Send filename for custom responses
+                    fakeIdentifyWaste(file.name);
                 };
                 img.src = e.target.result;
             };
@@ -86,11 +144,10 @@
             reader.readAsDataURL(file);
         });
 
-        // **Fake Identification Logic**
+        // Fake Identification for Uploaded Images
         function fakeIdentifyWaste(fileName = "") {
             let binType = "🟢 Green Bin (Organic Waste)"; // Default
 
-            // ✅ **Hardcoded Responses for Specific Images**
             if (fileName.match(/plastic|bottle|can|paper|metal|cardboard/i)) {
                 binType = "🔵 Blue Bin (Recyclables)";
             } else if (fileName.match(/battery|electronics|glass|hazardous|chemical|paint/i)) {
