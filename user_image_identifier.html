@@ -91,9 +91,9 @@
             let binType = "🟢 Green Bin (Organic Waste)"; // Default
 
             // ✅ **Hardcoded Responses for Specific Images**
-            if (fileName.match(/plastic|bottle|can|paper|glass|metal|cardboard/i)) {
+            if (fileName.match(/plastic|bottle|can|paper|metal|cardboard/i)) {
                 binType = "🔵 Blue Bin (Recyclables)";
-            } else if (fileName.match(/battery|electronics|hazardous|chemical|paint/i)) {
+            } else if (fileName.match(/battery|electronics|glass|hazardous|chemical|paint/i)) {
                 binType = "🔴 Red Bin (Hazardous / Non-Recyclables)";
             } else if (fileName.match(/food|apple|banana|vegetable|organic/i)) {
                 binType = "🟢 Green Bin (Organic Waste)";
