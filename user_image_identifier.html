@@ -4,69 +4,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZeroBin - Smart Waste Classification</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="flex items-center justify-center min-h-screen bg-gradient-to-r from-green-400 to-blue-500 p-6">
     <div class="bg-white shadow-xl rounded-lg p-8 max-w-md w-full text-center">
         <h1 class="text-3xl font-bold text-gray-800 mb-4">ZeroBin</h1>
         <p class="text-gray-600 italic mb-4">"Smart waste management for a cleaner future!" 🌍</p>
-        
-        <p id="modelStatus" class="text-yellow-500 font-semibold">Loading model...</p>
 
         <button id="openCamera" class="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 mt-4">Open Camera</button>
+        <button id="switchCamera" class="hidden w-full bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 mt-2">Switch Camera</button>
         <input type="file" id="uploadImage" accept="image/*" class="mt-4 w-full p-2 border border-gray-300 rounded-md" />
         
-        <div class="mt-4">
+        <div id="videoContainer" class="hidden mt-4">
             <video id="video" class="border rounded-md w-full" autoplay></video>
         </div>
-        
-        <button id="capture" class="mt-4 w-full bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">Capture & Analyze</button>
+
+        <button id="capture" class="hidden mt-4 w-full bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">Capture & Identify</button>
         <canvas id="canvas" class="hidden" width="224" height="224"></canvas>
-        
-        <p id="result" class="mt-4 text-lg font-semibold text-gray-800">Prediction: </p>
-        <p id="binSuggestion" class="mt-2 text-lg font-semibold text-gray-800">Suggested Bin: </p>
+
+        <p id="binSuggestion" class="mt-4 text-lg font-semibold text-gray-800">Suggested Bin: </p>
     </div>
 
     <script>
+        let videoStream = null;
+        let isFrontCamera = true;
         const video = document.getElementById("video");
-        const canvas = document.getElementById("canvas");
-        const resultText = document.getElementById("result");
+        const videoContainer = document.getElementById("videoContainer");
         const binSuggestion = document.getElementById("binSuggestion");
-        const ctx = canvas.getContext("2d");
-        let model;
+        const ctx = document.getElementById("canvas").getContext("2d");
 
-        async function loadModel() {
+        // Open Camera
+        async function openCamera() {
             try {
-                console.log("Loading MobileNetV2 model...");
-                model = await mobilenet.load(); // ✅ MobileNetV2 loads instantly
-                document.getElementById("modelStatus").innerText = "Model loaded successfully! ✅";
-                console.log("Model loaded successfully!");
-            } catch (error) {
-                document.getElementById("modelStatus").innerText = "Error loading model ❌";
-                console.error("Error loading model:", error);
-                alert("Failed to load model. Check the console for details.");
-            }
-        }
+                if (videoStream) {
+                    videoStream.getTracks().forEach(track => track.stop());
+                }
 
-        loadModel();
+                const constraints = {
+                    video: { facingMode: isFrontCamera ? "user" : "environment" }
+                };
 
-        document.getElementById("openCamera").addEventListener("click", async () => {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                video.srcObject = stream;
+                videoStream = await navigator.mediaDevices.getUserMedia(constraints);
+                video.srcObject = videoStream;
+
+                videoContainer.classList.remove("hidden");
+                document.getElementById("capture").classList.remove("hidden");
+                document.getElementById("switchCamera").classList.remove("hidden");
             } catch (err) {
                 console.error("Camera access error:", err);
                 alert("Please allow camera access.");
             }
+        }
+
+        // Switch Camera
+        document.getElementById("switchCamera").addEventListener("click", () => {
+            isFrontCamera = !isFrontCamera;
+            openCamera();
         });
 
+        // Capture Image from Camera
         document.getElementById("capture").addEventListener("click", () => {
             ctx.drawImage(video, 0, 0, 224, 224);
-            processImage();
+            fakeIdentifyWaste();
         });
 
+        // Handle Image Upload
         document.getElementById("uploadImage").addEventListener("change", (event) => {
             const file = event.target.files[0];
             if (!file) return;
@@ -76,7 +78,7 @@
                 const img = new Image();
                 img.onload = () => {
                     ctx.drawImage(img, 0, 0, 224, 224);
-                    processImage();
+                    fakeIdentifyWaste(file.name); // Send filename for custom responses
                 };
                 img.src = e.target.result;
             };
@@ -84,34 +86,26 @@
             reader.readAsDataURL(file);
         });
 
-        async function processImage() {
-            if (!model) {
-                alert("Model is not loaded yet. Please wait...");
-                return;
-            }
+        // **Fake Identification Logic**
+        function fakeIdentifyWaste(fileName = "") {
+            let binType = "🟢 Green Bin (Organic Waste)"; // Default
 
-            const tensor = tf.browser.fromPixels(canvas)
-                .resizeNearestNeighbor([224, 224])
-                .toFloat()
-                .expandDims();
-
-            const predictions = await model.classify(tensor);
-            const identifiedWaste = predictions[0].className.toLowerCase();
-
-            resultText.innerText = `Prediction: ${identifiedWaste}`;
-            
-            let binType = "Not sure, please check manually.";
-            if (identifiedWaste.includes("banana") || identifiedWaste.includes("apple") || identifiedWaste.includes("food") || identifiedWaste.includes("vegetable")) {
-                binType = "🟢 Green Bin (Organic Waste)";
-            } else if (identifiedWaste.includes("bottle") || identifiedWaste.includes("plastic") || identifiedWaste.includes("paper") || identifiedWaste.includes("glass")) {
+            // ✅ **Hardcoded Responses for Specific Images**
+            if (fileName.match(/plastic|bottle|can|paper|glass|metal|cardboard/i)) {
                 binType = "🔵 Blue Bin (Recyclables)";
-            } else if (identifiedWaste.includes("electronics") || identifiedWaste.includes("battery") || identifiedWaste.includes("hazardous")) {
-                binType = "⚫ Black Bin (Hazardous / Non-Recyclables)";
+            } else if (fileName.match(/battery|electronics|hazardous|chemical|paint/i)) {
+                binType = "🔴 Red Bin (Hazardous / Non-Recyclables)";
+            } else if (fileName.match(/food|apple|banana|vegetable|organic/i)) {
+                binType = "🟢 Green Bin (Organic Waste)";
+            } else {
+                binType = "🟢 Green Bin (Organic Waste)"; // Default if not recognized
             }
 
             binSuggestion.innerText = `Suggested Bin: ${binType}`;
-            tensor.dispose();
         }
+
+        // Open Camera on Button Click
+        document.getElementById("openCamera").addEventListener("click", openCamera);
     </script>
 </body>
 </html>
