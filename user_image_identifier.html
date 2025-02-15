@@ -89,7 +89,7 @@
             autoIdentifyWaste();
         });
 
-        // Auto-identify waste from captured image
+        // **Auto-identify waste from captured image (using MobileNet)**
         async function autoIdentifyWaste() {
             if (!model) {
                 alert("Model is not loaded yet. Please wait...");
@@ -105,9 +105,8 @@
                 const predictions = await model.classify(tensor);
                 console.log("Predictions:", predictions);
 
-                // Determine Suggested Bin
-                const identifiedWaste = predictions[0]?.className?.toLowerCase() || "";
-                let binType = "🔵 Blue Bin (Recyclables)"; // Default if unrecognized
+                let identifiedWaste = predictions[0]?.className?.toLowerCase() || "";
+                let binType = "🔵 Blue Bin (Recyclables)"; // Default if AI fails
 
                 if (identifiedWaste.includes("bottle") || identifiedWaste.includes("plastic") || identifiedWaste.includes("can") || identifiedWaste.includes("paper") || identifiedWaste.includes("metal") || identifiedWaste.includes("cardboard")) {
                     binType = "🔵 Blue Bin (Recyclables)";
@@ -126,7 +125,7 @@
             tensor.dispose();
         }
 
-        // Handle Image Upload (Fake AI)
+        // **Fake AI for Uploaded Images (No Changes!)**
         document.getElementById("uploadImage").addEventListener("change", (event) => {
             const file = event.target.files[0];
             if (!file) return;
@@ -144,9 +143,8 @@
             reader.readAsDataURL(file);
         });
 
-        // Fake Identification for Uploaded Images
         function fakeIdentifyWaste(fileName = "") {
-            let binType = "🟢 Green Bin (Organic Waste)"; // Default
+            let binType = "🟢 Green Bin (Organic Waste)";
 
             if (fileName.match(/plastic|bottle|can|paper|metal|cardboard/i)) {
                 binType = "🔵 Blue Bin (Recyclables)";
@@ -155,13 +153,12 @@
             } else if (fileName.match(/food|apple|banana|vegetable|organic/i)) {
                 binType = "🟢 Green Bin (Organic Waste)";
             } else {
-                binType = "🔵 Blue Bin (Recyclables)"; // Default if not recognized
+                binType = "🔵 Blue Bin (Recyclables)";
             }
 
             binSuggestion.innerText = `Suggested Bin: ${binType}`;
         }
 
-        // Open Camera on Button Click
         document.getElementById("openCamera").addEventListener("click", openCamera);
     </script>
 </body>
